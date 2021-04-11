@@ -10,13 +10,17 @@ const Shop = () => {
 
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
+    const [search, setSearch] = useState('');
+    
+    document.title = 'Shop';
 
     useEffect(() => {
-        const url = 'https://tranquil-beyond-55017.herokuapp.com/allProducts';
+        const url = 'https://tranquil-beyond-55017.herokuapp.com/allProducts?search='+search;
         fetch(url)
             .then(res => res.json())
             .then(data => setProducts(data));
-    }, []);
+    }, [search]);
+    
 
     useEffect(() => {
         const savedCart = getDatabaseCart();
@@ -61,9 +65,16 @@ const Shop = () => {
         addToDatabaseCart(product.key, count);
     }
 
+    const handleSearch = event => {
+        setSearch(event.target.value);
+    }
     return (
         <div className="twin-container">
+
+   
             <div className="product-container">
+            <input type="text" onBlur={handleSearch} className="form-control" placeholder="Search Your Products" />
+
                 {
                     products.map(pd => <Product
                         key={pd.key}
